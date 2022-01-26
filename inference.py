@@ -145,11 +145,33 @@ def main(args):
     np.random.seed(seed)
     random.seed(seed)
 
+    # COCO classes
+    CLASSES = [
+    'N/A', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
+    'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'N/A',
+    'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse',
+    'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'N/A', 'backpack',
+    'umbrella', 'N/A', 'N/A', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis',
+    'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove',
+    'skateboard', 'surfboard', 'tennis racket', 'bottle', 'N/A', 'wine glass',
+    'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich',
+    'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake',
+    'chair', 'couch', 'potted plant', 'bed', 'N/A', 'dining table', 'N/A',
+    'N/A', 'toilet', 'N/A', 'tv', 'laptop', 'mouse', 'remote', 'keyboard',
+    'cell phone', 'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'N/A',
+    'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier',
+    'toothbrush'
+    ]   
+    
+    # set device to CUDA 
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
     # load model
     model, criterion, postprocessors = build_model(args)
     model.eval()
-    state_dict = torch.hub.load_state_dict_from_url(args.resume)
+    state_dict = torch.load(args.resume, map_location="cpu")['model']
     model.load_state_dict(state_dict)
+    model.to(device)
 
     # prepare image
     transform = T.Compose([
@@ -160,11 +182,18 @@ def main(args):
     
     url = 'http://images.cocodataset.org/val2017/000000039769.jpg'
     image = Image.open(requests.get(url, stream=True).raw)
-    pixel_values = transform(image).unsqueeze(0)
+    pixel_values = transform(image).unsqueeze(0).to(device)
     
     # forward pass
     outputs = model(pixel_values)
     print(outputs.keys())
+    print("Shape of logits:", outputs["pred_logits"].shape)
+    # keep only predictions with 0.7+ confidence
+    probas = outputs['pred_logits'].softmax(-1)[0, :, :-1]
+    keep = probas.max(-1).values > 0.7
+    predicted_classes = probas[keep].argmax(-1).tolist()
+    print("Predicted classes:", [CLASSES[idx] for idx in predicted_classes])
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Deformable DETR inference script', parents=[get_args_parser()])

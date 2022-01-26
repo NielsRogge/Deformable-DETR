@@ -1,0 +1,7 @@
+# ninja log v5
+0	2969	1643188751540612672	/home/niels/python_projects/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.9/home/niels/python_projects/Deformable-DETR/models/ops/src/cpu/ms_deform_attn_cpu.o	584d3ba53351db78
+0	8581	1643188757144619685	/home/niels/python_projects/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.9/home/niels/python_projects/Deformable-DETR/models/ops/src/cuda/ms_deform_attn_cuda.o	6eba7f736435cad7
+0	14382	1643188762944626943	/home/niels/python_projects/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.9/home/niels/python_projects/Deformable-DETR/models/ops/src/vision.o	dfcdd1181c4b099e
+2	4505	1643189957329415687	/home/niels/python_projects/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.9/home/niels/python_projects/Deformable-DETR/models/ops/src/cpu/ms_deform_attn_cpu.o	584d3ba53351db78
+2	10082	1643189962805409839	/home/niels/python_projects/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.9/home/niels/python_projects/Deformable-DETR/models/ops/src/cuda/ms_deform_attn_cuda.o	5c3fea6018abefc9
+3	17038	1643189969857402477	/home/niels/python_projects/Deformable-DETR/models/ops/build/temp.linux-x86_64-3.9/home/niels/python_projects/Deformable-DETR/models/ops/src/vision.o	dfcdd1181c4b099e

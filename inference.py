@@ -148,7 +148,8 @@ def main(args):
     # load model
     model, criterion, postprocessors = build_model(args)
     model.eval()
-    model.load_state_dict(torch.load(args.resume)['model'])
+    state_dict = torch.hub.load_state_dict_from_url(args.resume)
+    model.load_state_dict(state_dict)
 
     # prepare image
     transform = T.Compose([
